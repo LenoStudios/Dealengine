@@ -8,7 +8,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Playfair+Display:ital,wght@0,500;0,700;0,800;1,500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD6dkKzPl5OE__uH0VfCyJrSdah-h2EXGs&libraries=places"></script>
   <style>
     :root {
       --obsidian: #080a0d; --charcoal: #0f1419; --slate: #1a2127; --gold: #d4af37; --gold-light: #f0da8c;
@@ -100,14 +99,13 @@
 
   <script>
     (function() {
-      const K = 'rde_v1';
+      const K = 'rde_v2';
       let S = { curView: 'dashboard', tier: 'free', analysis: null, selConcepts: [], compDeals: [],
         pipeline: [
           { id: 1, n: 'Sample Project', st: 'Analysis', sc: 78, r: 24.7, a: '800 Congress Ave, Austin TX', z: 'C-MU', f: 4.0, h: 90, l: 24000, lc: 2100000, hc: 255, rt: 3300, ct: 'concrete', pr: 1.0, um: [15,40,35,10], rp: 15, af: 10, ph: false, ec: true },
         ],
         conceptFilter: { style: 'all', industry: 'all', scale: 'all' },
-        contacts: [],
-        msgs: {}, unread: {}, smsHistory: [], callHistory: [],
+        contacts: [], msgs: {}, unread: {}, smsHistory: [], callHistory: [],
       };
 
       function save() { try { localStorage.setItem(K, JSON.stringify({ curView: S.curView, tier: S.tier, selConcepts: S.selConcepts, compDeals: S.compDeals, pipeline: S.pipeline, conceptFilter: S.conceptFilter })); } catch (e) {} }
@@ -117,7 +115,7 @@
       function regCtx(c, z) { const d = { ep: 'By-right (6-8 mo)', er: 'low', ns: 0.35, nr: 'Medium', ifu: 18500, ip: 10 }; const cl = (c || '').toLowerCase(); if (cl.includes('austin')) { d.ifu = 18500; } else if (cl.includes('los angeles')) { d.ifu = 25000; d.ip = 15; d.ep = 'Conditional (12-18 mo)'; d.er = 'high'; d.nr = 'High'; } else if (cl.includes('phoenix')) { d.ifu = 12000; d.ip = 5; d.ep = 'By-right (4-6 mo)'; d.nr = 'Low'; } if ((z || '').includes('TOD')) { d.ep = 'Expedited (4-5 mo)'; } return d; }
 
       function analyze() {
-        const a = document.getElementById('sa')?.value || '800 Congress Ave, Austin TX';
+        const a = document.getElementById('sa')?.value || '';
         const z = document.getElementById('sz')?.value || 'C-MU'; const fl = parseFloat(document.getElementById('sf')?.value) || 4.0;
         const mh = parseFloat(document.getElementById('sh')?.value) || 90; const ls = parseFloat(document.getElementById('sl')?.value) || 24000;
         const sr = document.getElementById('ss')?.value || '15 / 10'; const lc = parseFloat(document.getElementById('slc')?.value) || 2100000;
@@ -129,7 +127,7 @@
         const ph = document.getElementById('sph')?.value === 'true'; const ec = document.getElementById('sec')?.value === 'true';
         const ctCost = { wood: 200, concrete: 280, steel: 340 }[ct] || 255; const effectiveHC = hci > 0 ? hci : ctCost;
         const nums = (sr || '15/10').match(/\d+/g) || [15, 10]; const fs = parseFloat(nums[0]) || 15; const ss = parseFloat(nums[1]) || 10;
-        const mk = marketCtx(a, z); const cn = (a || '').split(',').slice(1).join(',').trim() || 'Austin'; const rg = regCtx(cn, z);
+        const mk = marketCtx(a, z); const cn = (a || 'Austin').split(',').slice(1).join(',').trim() || 'Austin'; const rg = regCtx(cn, z);
         const lw = Math.sqrt(ls * 1.3); const ld = ls / lw; const bw = Math.max(12, lw - 2 * ss); const bd = Math.max(12, ld - fs - (fs * 0.7));
         const fp = bw * bd; const mg = ls * fl; const sbh = Math.floor(mh / 11); const sbf = mg > 0 && fp > 0 ? Math.floor(mg / fp) : 1;
         const as = Math.min(sbh, Math.max(1, sbf), 12); const ag = Math.min(mg, fp * as);
@@ -206,7 +204,7 @@
       }
 
       const views = {
-        dashboard: () => { const d = S.analysis || analyze(); return `<div class="grid-2"><div class="card"><div class="card-header">DEAL SCORE</div><div class="score-dial">${d.ds}</div><p style="text-align:center;color:var(--gold);font-weight:700;">${d.dsl}</p></div><div class="card"><div class="card-header">PIPELINE</div><p style="color:var(--text-muted);font-size:0.6rem;">Add your first deal in the Analyzer tab.</p></div></div>`; },
+        dashboard: () => { const d = S.analysis || analyze(); return `<div class="grid-2"><div class="card"><div class="card-header">DEAL SCORE</div><div class="score-dial">${d.ds}</div><p style="text-align:center;color:var(--gold);font-weight:700;">${d.dsl}</p></div><div class="card"><div class="card-header">PIPELINE</div><p style="color:var(--text-muted);font-size:0.6rem;">Add deals in the Analyzer tab. Your pipeline saves automatically.</p></div></div>`; },
         analyzer: () => `
           <div class="grid-2">
             <div class="card"><div class="card-header">PARAMETERS</div>
@@ -244,24 +242,6 @@
       document.getElementById('mainNav').addEventListener('click', e => { const b = e.target.closest('.nav-btn'); if (!b) return; document.querySelectorAll('.nav-btn').forEach(x => x.classList.remove('active')); b.classList.add('active'); render(b.dataset.view); });
 
       S.analysis = analyze(); render('dashboard');
-
-      if (typeof google !== 'undefined' && google.maps && google.maps.places) {
-        const input = document.getElementById('sa');
-        if (input) {
-          const autocomplete = new google.maps.places.Autocomplete(input, { types: ['address'], componentRestrictions: { country: 'us' } });
-          autocomplete.addListener('place_changed', () => { const place = autocomplete.getPlace(); if (place.formatted_address) { input.value = place.formatted_address; updateAnalyzerUI(); } });
-        }
-      } else {
-        window.addEventListener('load', () => {
-          if (typeof google !== 'undefined' && google.maps && google.maps.places) {
-            const input = document.getElementById('sa');
-            if (input) {
-              const autocomplete = new google.maps.places.Autocomplete(input, { types: ['address'], componentRestrictions: { country: 'us' } });
-              autocomplete.addListener('place_changed', () => { const place = autocomplete.getPlace(); if (place.formatted_address) { input.value = place.formatted_address; updateAnalyzerUI(); } });
-            }
-          }
-        });
-      }
     })();
   </script>
 </body>
