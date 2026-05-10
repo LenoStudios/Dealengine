@@ -3,228 +3,118 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
-  <title>Deal Engine | AI Land Development Feasibility Platform</title>
+  <title>RealDeal Engine | AI Land Development Feasibility Platform</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Playfair+Display:ital,wght@0,500;0,700;0,800;1,500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD6dkKzPl5OE__uH0VfCyJrSdah-h2EXGs&libraries=places"></script>
   <style>
     :root {
-      --obsidian: #080a0d;
-      --charcoal: #0f1419;
-      --slate: #1a2127;
-      --concrete: #242d34;
-      --steel: #3a453a;
-      --gold: #d4af37;
-      --gold-light: #f0da8c;
-      --gold-dark: #b8960f;
-      --gold-glow: 0 0 20px rgba(212, 175, 55, 0.4);
-      --gold-dim: rgba(212, 175, 55, 0.08);
-      --profit: #2ecc71;
-      --profit-glow: 0 0 12px rgba(46, 204, 113, 0.4);
-      --warning: #f39c12;
-      --danger: #e74c3c;
-      --info: #5dade2;
-      --premium: #9b59b6;
-      --text-primary: #f0e5c6;
-      --text-secondary: #cfc5a5;
-      --text-muted: #b7ad8c;
-      --text-label: #b9aa8c;
-      --font-display: 'Playfair Display', serif;
-      --font-mono: 'DM Mono', monospace;
-      --radius-sm: 0.5rem;
-      --radius-md: 0.8rem;
-      --radius-lg: 1.2rem;
-      --radius-xl: 1.5rem;
-      --transition: 0.22s ease;
-      --transition-slow: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      --obsidian: #080a0d; --charcoal: #0f1419; --slate: #1a2127; --gold: #d4af37; --gold-light: #f0da8c;
+      --profit: #2ecc71; --danger: #e74c3c; --info: #5dade2; --text-primary: #f0e5c6; --text-muted: #b7ad8c;
+      --font-display: 'Playfair Display', serif; --font-mono: 'DM Mono', monospace;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      background: var(--obsidian);
-      display: flex; justify-content: center; align-items: flex-start;
-      min-height: 100vh; padding: 0.75rem;
-      font-family: var(--font-mono); color: var(--text-primary);
-      background-image: radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.03) 0%, transparent 60%),
-        radial-gradient(ellipse at 80% 100%, rgba(46,204,113,0.02) 0%, transparent 50%);
-    }
-    .grid-bg {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      pointer-events: none; z-index: 0; opacity: 0.022;
-      background-image: linear-gradient(rgba(212,175,55,0.3) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(212,175,55,0.3) 1px, transparent 1px);
-      background-size: 40px 40px;
-    }
-    .particle { position: fixed; pointer-events: none; z-index: 0; border-radius: 50%; background: var(--gold); opacity: 0; animation: floatUp 9s infinite ease-in; }
-    @keyframes floatUp { 0% { transform: translateY(100vh) scale(0); opacity: 0; } 10% { opacity: 0.05; } 90% { opacity: 0.03; } 100% { transform: translateY(-10vh) scale(1); opacity: 0; } }
-    .app-wrapper {
-      max-width: 1500px; width: 100%; background: rgba(20,26,31,0.65);
-      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-      border-radius: var(--radius-xl); box-shadow: 0 30px 50px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.025);
-      overflow: hidden; display: flex; flex-direction: column;
-      border: 1px solid rgba(212,175,55,0.12); position: relative; z-index: 1;
-    }
-    .top-bar {
-      background: rgba(15,20,25,0.55); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-      padding: 0.85rem 1.5rem; display: flex; flex-wrap: wrap; align-items: center;
-      justify-content: space-between; border-bottom: 1px solid rgba(212,175,55,0.08);
-      gap: 0.7rem; position: sticky; top: 0; z-index: 50;
-    }
+    body { background: var(--obsidian); display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; padding: 0.75rem; font-family: var(--font-mono); color: var(--text-primary); }
+    .app-wrapper { max-width: 1500px; width: 100%; background: rgba(20,26,31,0.65); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: 1.5rem; box-shadow: 0 30px 50px rgba(0,0,0,0.7); overflow: hidden; display: flex; flex-direction: column; border: 1px solid rgba(212,175,55,0.12); }
+    .top-bar { background: rgba(15,20,25,0.55); backdrop-filter: blur(15px); padding: 0.85rem 1.5rem; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(212,175,55,0.08); }
     .brand { display: flex; align-items: center; gap: 0.5rem; }
-    .brand i { font-size: 1.6rem; color: var(--gold); filter: drop-shadow(0 0 8px rgba(212,175,55,0.5)); animation: iconPulse 4s infinite ease-in-out; }
-    @keyframes iconPulse { 0%,100% { filter: drop-shadow(0 0 8px rgba(212,175,55,0.5)); } 50% { filter: drop-shadow(0 0 18px rgba(212,175,55,0.8)); } }
-    .brand h1 { font-family: var(--font-display); font-weight: 700; font-size: 1.5rem; letter-spacing: 0.8px; color: var(--text-primary); }
+    .brand i { font-size: 1.6rem; color: var(--gold); }
+    .brand h1 { font-family: var(--font-display); font-weight: 700; font-size: 1.5rem; color: var(--text-primary); }
     .brand h1 span { font-weight: 500; color: var(--gold); }
-    .top-actions { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
-    .badge { padding: 0.28rem 0.85rem; border-radius: 20px; font-size: 0.58rem; font-weight: 600; letter-spacing: 0.4px; display: flex; align-items: center; gap: 0.3rem; font-family: var(--font-mono); cursor: pointer; transition: var(--transition); }
-    .badge-live { background: var(--gold-dim); border: 1px solid rgba(212,175,55,0.3); color: var(--gold); }
-    .badge-msg { background: rgba(255,255,255,0.03); border: 1px solid var(--steel); color: var(--text-muted); position: relative; }
-    .badge-msg:hover { border-color: var(--gold); color: var(--gold); }
-    .badge-count { position: absolute; top: -5px; right: -5px; background: var(--danger); color: #fff; border-radius: 50%; width: 16px; height: 16px; font-size: 0.42rem; display: none; align-items: center; justify-content: center; font-weight: 700; }
-    .save-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--profit); opacity: 0; transition: var(--transition); }
-    .save-dot.visible { opacity: 1; box-shadow: var(--profit-glow); }
-    .main-nav {
-      display: flex; gap: 0.12rem; padding: 0.5rem 1.5rem;
-      background: rgba(17,23,28,0.45); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(212,175,55,0.06); flex-wrap: wrap; overflow-x: auto; scrollbar-width: none;
-    }
-    .main-nav::-webkit-scrollbar { display: none; }
-    .nav-btn {
-      background: transparent; border: 1px solid transparent; color: var(--text-muted);
-      padding: 0.42rem 0.9rem; border-radius: 22px; font-family: var(--font-mono); font-weight: 600;
-      cursor: pointer; transition: var(--transition); font-size: 0.6rem; white-space: nowrap; position: relative;
-    }
-    .nav-btn::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 0; height: 2px; background: var(--gold); transition: var(--transition); border-radius: 2px; }
-    .nav-btn:hover::after { width: 55%; } .nav-btn:hover { color: var(--gold-light); }
-    .nav-btn.active { background: rgba(212,175,55,0.1); color: var(--gold); border-color: rgba(212,175,55,0.25); box-shadow: 0 0 10px rgba(212,175,55,0.15); }
-    .content-area { padding: 1.2rem 1.5rem; min-height: 520px; position: relative; z-index: 1; }
+    .main-nav { display: flex; gap: 0.12rem; padding: 0.5rem 1.5rem; background: rgba(17,23,28,0.45); border-bottom: 1px solid rgba(212,175,55,0.06); flex-wrap: wrap; overflow-x: auto; }
+    .nav-btn { background: transparent; border: 1px solid transparent; color: var(--text-muted); padding: 0.42rem 0.9rem; border-radius: 22px; font-family: var(--font-mono); font-weight: 600; cursor: pointer; font-size: 0.6rem; white-space: nowrap; transition: 0.22s; }
+    .nav-btn.active { background: rgba(212,175,55,0.1); color: var(--gold); border-color: rgba(212,175,55,0.25); }
+    .nav-btn:hover { color: var(--gold-light); }
+    .content-area { padding: 1.2rem 1.5rem; min-height: 520px; }
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
     @media (max-width: 1000px) { .grid-2 { grid-template-columns: 1fr; } }
-    .card {
-      background: rgba(26,33,39,0.65); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-      border-radius: var(--radius-lg); padding: 1.1rem; border: 1px solid rgba(212,175,55,0.08);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.02);
-      opacity: 0; transform: translateY(16px); transition: var(--transition-slow);
-    }
-    .card.visible { opacity: 1; transform: translateY(0); }
-    .card-header {
-      font-family: var(--font-display); font-weight: 700; font-size: 0.95rem; color: var(--text-primary);
-      display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.8rem;
-      border-bottom: 1px solid rgba(212,175,55,0.06); padding-bottom: 0.45rem;
-    }
-    .card-header i { color: var(--gold); font-size: 0.85rem; }
-    .chip { background: rgba(212,175,55,0.07); color: var(--gold-light); font-size: 0.48rem; padding: 0.08rem 0.45rem; border-radius: 10px; margin-left: 0.25rem; font-family: var(--font-mono); letter-spacing: 0.2px; }
+    .card { background: rgba(26,33,39,0.65); backdrop-filter: blur(15px); border-radius: 1.2rem; padding: 1.1rem; border: 1px solid rgba(212,175,55,0.08); box-shadow: 0 8px 20px rgba(0,0,0,0.35); margin-bottom: 1rem; }
+    .card-header { font-family: var(--font-display); font-weight: 700; font-size: 0.95rem; color: var(--text-primary); display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.8rem; border-bottom: 1px solid rgba(212,175,55,0.06); padding-bottom: 0.45rem; }
+    .card-header i { color: var(--gold); }
     .form-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.55rem; }
     @media (max-width: 800px) { .form-grid { grid-template-columns: 1fr 1fr; } }
     .field { display: flex; flex-direction: column; gap: 0.18rem; }
-    .field.span-2 { grid-column: span 2; } .field.span-3 { grid-column: span 3; }
-    .field label { font-size: 0.52rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-label); font-weight: 500; }
-    .field input, .field select { background: rgba(15,21,26,0.65); border: 1px solid var(--steel); border-radius: 0.45rem; padding: 0.42rem 0.5rem; font-size: 0.65rem; color: var(--text-primary); font-family: var(--font-mono); transition: var(--transition); }
-    .field input:focus, .field select:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 2px rgba(212,175,55,0.12); }
-    .field input[type="range"] { padding: 0; accent-color: var(--gold); height: 6px; }
-    .slider-row { display: flex; align-items: center; gap: 0.5rem; }
-    .slider-row span { font-size: 0.55rem; color: var(--text-muted); min-width: 85px; }
-    .slider-row input[type="range"] { flex: 1; }
-    .slider-row .val { color: var(--gold); font-weight: 700; font-size: 0.65rem; min-width: 45px; text-align: right; }
-    .btn { font-weight: 700; padding: 0.45rem 0.9rem; border-radius: 22px; cursor: pointer; font-family: var(--font-mono); transition: var(--transition); font-size: 0.62rem; display: inline-flex; align-items: center; justify-content: center; gap: 0.3rem; letter-spacing: 0.3px; border: 1.5px solid transparent; }
+    .field.span-3 { grid-column: span 3; }
+    .field label { font-size: 0.52rem; text-transform: uppercase; color: #b9aa8c; font-weight: 500; }
+    .field input, .field select { background: rgba(15,21,26,0.65); border: 1px solid #3a453a; border-radius: 0.45rem; padding: 0.42rem 0.5rem; font-size: 0.65rem; color: var(--text-primary); font-family: var(--font-mono); }
+    .field input:focus, .field select:focus { outline: none; border-color: var(--gold); }
+    .btn { font-weight: 700; padding: 0.45rem 0.9rem; border-radius: 22px; cursor: pointer; font-family: var(--font-mono); font-size: 0.62rem; display: inline-flex; align-items: center; justify-content: center; gap: 0.3rem; border: 1.5px solid transparent; transition: 0.22s; }
     .btn-gold { background: rgba(212,175,55,0.07); border-color: var(--gold); color: var(--gold); }
-    .btn-gold:hover { background: var(--gold); color: #0c0f14; box-shadow: var(--gold-glow); transform: translateY(-1px); }
+    .btn-gold:hover { background: var(--gold); color: #0c0f14; }
     .btn-gold.fill { background: var(--gold); color: #0c0f14; }
-    .btn-sm { padding: 0.22rem 0.6rem; font-size: 0.5rem; } .btn-full { width: 100%; }
-    .metric { display: flex; justify-content: space-between; align-items: baseline; background: rgba(20,28,33,0.5); border-radius: 0.55rem; padding: 0.4rem 0.7rem; margin-bottom: 0.25rem; border: 1px solid rgba(255,255,255,0.025); }
+    .btn-full { width: 100%; }
+    .metric { display: flex; justify-content: space-between; align-items: baseline; background: rgba(20,28,33,0.5); border-radius: 0.55rem; padding: 0.4rem 0.7rem; margin-bottom: 0.25rem; }
     .metric-label { color: var(--text-muted); font-size: 0.56rem; text-transform: uppercase; }
-    .metric-value { font-family: var(--font-display); font-weight: 800; font-size: 0.9rem; color: var(--text-primary); }
-    .metric-value.green { color: var(--profit); text-shadow: var(--profit-glow); }
-    .study-box { background: rgba(17,25,32,0.55); border-radius: 0.55rem; padding: 0.55rem; border-left: 3px solid var(--gold); font-size: 0.58rem; color: var(--text-secondary); line-height: 1.5; margin: 0.25rem 0; }
-    .study-box strong { color: var(--gold-light); font-weight: 600; }
-    .score-dial { width: 65px; height: 65px; border-radius: 50%; border: 3px solid var(--gold); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 800; font-size: 1.5rem; color: var(--gold); margin: 0 auto 0.3rem; box-shadow: 0 0 14px rgba(212,175,55,0.2); }
-    .pipeline-item { background: rgba(20,28,33,0.4); padding: 0.4rem 0.65rem; border-radius: 0.45rem; margin: 0.18rem 0; display: flex; justify-content: space-between; align-items: center; font-size: 0.56rem; gap: 0.35rem; flex-wrap: wrap; border: 1px solid transparent; transition: var(--transition); }
-    .pipeline-item:hover { border-color: rgba(212,175,55,0.12); background: rgba(26,35,40,0.5); }
+    .metric-value { font-family: var(--font-display); font-weight: 800; font-size: 0.9rem; }
+    .metric-value.green { color: var(--profit); }
+    .study-box { background: rgba(17,25,32,0.55); border-radius: 0.55rem; padding: 0.55rem; border-left: 3px solid var(--gold); font-size: 0.58rem; color: #cfc5a5; line-height: 1.5; margin: 0.25rem 0; }
+    .score-dial { width: 65px; height: 65px; border-radius: 50%; border: 3px solid var(--gold); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 800; font-size: 1.5rem; color: var(--gold); margin: 0 auto 0.3rem; }
+    .pipeline-item { background: rgba(20,28,33,0.4); padding: 0.4rem 0.65rem; border-radius: 0.45rem; margin: 0.18rem 0; display: flex; justify-content: space-between; align-items: center; font-size: 0.56rem; gap: 0.35rem; flex-wrap: wrap; }
     .tag { background: rgba(42,58,46,0.5); color: #b9d0b0; padding: 0.1rem 0.45rem; border-radius: 9px; font-size: 0.48rem; }
-    .tag.gold { background: var(--gold-dim); color: var(--gold); border: 1px solid rgba(212,175,55,0.15); }
-    .filter-bar { display: flex; gap: 0.2rem; flex-wrap: wrap; align-items: center; margin-bottom: 0.5rem; }
-    .filter-btn { background: transparent; border: 1px solid var(--steel); color: var(--text-muted); padding: 0.12rem 0.45rem; border-radius: 9px; cursor: pointer; font-family: var(--font-mono); font-size: 0.48rem; transition: var(--transition); }
-    .filter-btn.on { background: var(--gold); color: #0c0f14; border-color: var(--gold); font-weight: 700; }
+    .tag.gold { background: rgba(212,175,55,0.08); color: var(--gold); }
     .concept-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 0.6rem; margin-top: 0.5rem; }
-    .concept-card { background: rgba(17,25,32,0.5); border: 1px solid rgba(255,255,255,0.03); border-radius: var(--radius-md); overflow: hidden; cursor: pointer; transition: var(--transition-slow); }
-    .concept-card:hover { border-color: var(--gold); box-shadow: 0 0 12px rgba(212,175,55,0.08); transform: translateY(-2px); }
-    .concept-card.selected { border-color: var(--gold); border-width: 2px; box-shadow: 0 0 15px rgba(212,175,55,0.15); }
+    .concept-card { background: rgba(17,25,32,0.5); border: 1px solid rgba(255,255,255,0.03); border-radius: 0.8rem; overflow: hidden; cursor: pointer; transition: 0.35s; }
+    .concept-card:hover { border-color: var(--gold); transform: translateY(-2px); }
     .concept-img { height: 100px; background: linear-gradient(135deg, #1a2430, #243040); display: flex; align-items: center; justify-content: center; position: relative; }
     .concept-img i { font-size: 1.8rem; color: var(--gold-light); opacity: 0.5; }
     .concept-info { padding: 0.45rem; }
     .concept-info h4 { font-family: var(--font-display); font-size: 0.7rem; margin-bottom: 0.15rem; }
+    .filter-bar { display: flex; gap: 0.2rem; flex-wrap: wrap; align-items: center; margin-bottom: 0.5rem; }
+    .filter-btn { background: transparent; border: 1px solid #3a453a; color: var(--text-muted); padding: 0.12rem 0.45rem; border-radius: 9px; cursor: pointer; font-family: var(--font-mono); font-size: 0.48rem; }
+    .filter-btn.on { background: var(--gold); color: #0c0f14; border-color: var(--gold); font-weight: 700; }
+    .lock-overlay { position: relative; }
+    .locked { filter: blur(3px); pointer-events: none; opacity: 0.5; }
+    .lock-badge { position: absolute; top: 8px; right: 12px; background: #0c0f14; color: var(--gold); padding: 0.2rem 0.7rem; border-radius: 14px; font-size: 0.55rem; border: 1px solid var(--gold); z-index: 2; display: none; }
+    .toast { position: fixed; bottom: 1.5rem; right: 1.5rem; background: rgba(26,33,39,0.9); border: 1px solid var(--gold); color: var(--text-primary); padding: 0.65rem 1.1rem; border-radius: 0.8rem; z-index: 200; font-size: 0.6rem; }
+    .badge { padding: 0.28rem 0.85rem; border-radius: 20px; font-size: 0.58rem; font-weight: 600; display: flex; align-items: center; gap: 0.3rem; }
+    .badge-live { background: rgba(212,175,55,0.08); border: 1px solid rgba(212,175,55,0.3); color: var(--gold); }
+    .empty-state { text-align: center; padding: 2rem; color: var(--text-muted); font-size: 0.65rem; }
+    .empty-state i { font-size: 2rem; color: var(--gold); opacity: 0.3; margin-bottom: 0.5rem; display: block; }
     .concept-badge { position: absolute; top: 5px; right: 5px; padding: 0.08rem 0.35rem; border-radius: 7px; font-size: 0.4rem; font-weight: 700; }
     .badge-roi { background: rgba(46,204,113,0.2); color: var(--profit); border: 1px solid rgba(46,204,113,0.4); }
     .badge-fit { background: rgba(93,173,226,0.2); color: var(--info); border: 1px solid rgba(93,173,226,0.4); }
-    .badge-premium { background: var(--gold-dim); color: var(--gold); border: 1px solid rgba(212,175,55,0.3); }
-    .empty-state { text-align: center; padding: 2rem; color: var(--text-muted); font-size: 0.65rem; }
-    .empty-state i { font-size: 2rem; color: var(--gold); opacity: 0.3; margin-bottom: 0.5rem; display: block; }
-    .lock-overlay { position: relative; }
-    .locked { filter: blur(3px); pointer-events: none; user-select: none; opacity: 0.5; }
-    .lock-badge { position: absolute; top: 8px; right: 12px; background: #0c0f14; color: var(--gold); padding: 0.2rem 0.7rem; border-radius: 14px; font-size: 0.55rem; border: 1px solid var(--gold); z-index: 2; display: none; font-weight: 600; }
-    .toast { position: fixed; bottom: 1.5rem; right: 1.5rem; background: rgba(26,33,39,0.9); backdrop-filter: blur(15px); border: 1px solid var(--gold); color: var(--text-primary); padding: 0.65rem 1.1rem; border-radius: var(--radius-md); z-index: 200; font-size: 0.6rem; box-shadow: var(--gold-glow); animation: slideUp 0.3s ease; }
-    @keyframes slideUp { from { transform: translateY(18px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    .badge-premium { background: rgba(212,175,55,0.08); color: var(--gold); border: 1px solid rgba(212,175,55,0.3); }
   </style>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD6dkKzPl5OE__uH0VfCyJrSdah-h2EXGs&libraries=places"></script>
 </head>
 <body>
-  <div class="grid-bg"></div>
-  <div id="particles"></div>
   <div class="app-wrapper">
     <div class="top-bar">
-      <div class="brand"><i class="fas fa-landmark"></i><h1>Deal<span>Engine</span></h1></div>
+      <div class="brand"><i class="fas fa-landmark"></i><h1>RealDeal<span>Engine</span></h1></div>
       <div class="top-actions">
-        <span class="save-dot" id="saveDot"></span>
-        <span class="badge badge-msg" onclick="openGlobalChat()"><i class="fas fa-comments"></i> Messages <span class="badge-count" id="unreadBadge">0</span></span>
         <span class="badge badge-live"><i class="fas fa-satellite-dish"></i> LIVE US DATA</span>
       </div>
     </div>
-
-    <!-- NAVIGATION: Concepts repositioned to second-to-last -->
     <div class="main-nav" id="mainNav">
-      <button class="nav-btn active" data-view="dashboard">📊 Dashboard</button>
-      <button class="nav-btn" data-view="analyzer">🔬 Analyzer</button>
-      <button class="nav-btn" data-view="finance">💰 Finance</button>
-      <button class="nav-btn" data-view="research">📚 Research</button>
-      <button class="nav-btn" data-view="concepts">🎨 Concepts</button>
-      <button class="nav-btn" data-view="network">🤝 Network</button>
+      <button class="nav-btn active" data-view="dashboard">Dashboard</button>
+      <button class="nav-btn" data-view="analyzer">Analyzer</button>
+      <button class="nav-btn" data-view="finance">Finance</button>
+      <button class="nav-btn" data-view="research">Research</button>
+      <button class="nav-btn" data-view="concepts">Concepts</button>
+      <button class="nav-btn" data-view="network">Network</button>
     </div>
-
     <div class="content-area" id="contentArea"></div>
   </div>
   <div id="toastContainer"></div>
 
   <script>
     (function() {
-      const K = 'de_v8';
-      let S = {
-        curView: 'dashboard', tier: 'free', analysis: null, selConcepts: [], compDeals: [],
+      const K = 'rde_v1';
+      let S = { curView: 'dashboard', tier: 'free', analysis: null, selConcepts: [], compDeals: [],
         pipeline: [
-          { id: 1, n: '800 Congress Ave', st: 'Analysis', sc: 78, r: 24.7, a: '800 Congress Ave, Austin TX', z: 'C-MU', f: 4.0, h: 90, l: 24000, lc: 2100000, hc: 255, rt: 3300, ct: 'concrete', pr: 1.0, um: [15,40,35,10], rp: 15, af: 10, ph: false, ec: true },
-          { id: 2, n: '2121 S Lamar Blvd', st: 'Lead', sc: 64, r: 16.2, a: '2121 S Lamar Blvd, Austin TX', z: 'R-MF', f: 3.0, h: 60, l: 18000, lc: 1400000, hc: 235, rt: 2800, ct: 'wood', pr: 1.5, um: [10,50,30,10], rp: 0, af: 5, ph: false, ec: false },
-          { id: 3, n: '4500 Industrial Way', st: 'Offer', sc: 89, r: 31.4, a: '4500 Industrial Way, Austin TX', z: 'I-L', f: 2.5, h: 75, l: 35000, lc: 2800000, hc: 210, rt: 3500, ct: 'steel', pr: 0.8, um: [20,30,40,10], rp: 0, af: 0, ph: true, ec: false },
-          { id: 4, n: '789 Rio Grande St', st: 'Due Diligence', sc: 72, r: 20.1, a: '789 Rio Grande St, Austin TX', z: 'D-TOD', f: 5.0, h: 120, l: 15000, lc: 3200000, hc: 280, rt: 3600, ct: 'concrete', pr: 0.5, um: [25,35,30,10], rp: 20, af: 15, ph: true, ec: true },
+          { id: 1, n: 'Sample Project', st: 'Analysis', sc: 78, r: 24.7, a: '800 Congress Ave, Austin TX', z: 'C-MU', f: 4.0, h: 90, l: 24000, lc: 2100000, hc: 255, rt: 3300, ct: 'concrete', pr: 1.0, um: [15,40,35,10], rp: 15, af: 10, ph: false, ec: true },
         ],
         conceptFilter: { style: 'all', industry: 'all', scale: 'all' },
-        contacts: [
-          { id: 'c1', n: 'Sarah Chen', rl: 'Zoning Attorney', co: 'Smith & Partners', ph: '+1-512-555-0101', em: 'sarah@smithpartners.com', av: '⚖️', on: true, pr: '800 Congress Ave', un: 2 },
-          { id: 'c2', n: 'Marcus Rivera', rl: 'Architect', co: 'UrbanForm Design', ph: '+1-512-555-0202', em: 'marcus@urbanform.co', av: '📐', on: true, pr: '800 Congress Ave', un: 0 },
-          { id: 'c3', n: 'James Okonkwo', rl: 'GC', co: 'BuildRight Construction', ph: '+1-737-555-0303', em: 'james@buildright.com', av: '🔨', on: false, pr: '4500 Industrial Way', un: 1 },
-          { id: 'c4', n: 'Lisa Park', rl: 'Environmental', co: 'EcoAssess Inc.', ph: '+1-512-555-0404', em: 'lisa@ecoassess.com', av: '🌿', on: true, pr: '2121 S Lamar Blvd', un: 0 },
-          { id: 'c5', n: 'David Thompson', rl: 'Equity Partner', co: 'Skyline Capital GP', ph: '+1-415-555-0505', em: 'david@skylinecap.com', av: '💰', on: false, pr: '789 Rio Grande St', un: 3 },
-          { id: 'c6', n: 'Maria Gonzalez', rl: 'Senior Lender', co: 'First National CRE', ph: '+1-212-555-0606', em: 'maria@firstnational.com', av: '🏦', on: true, pr: '800 Congress Ave', un: 0 },
-        ],
+        contacts: [],
         msgs: {}, unread: {}, smsHistory: [], callHistory: [],
       };
 
-      function load() { try { const s = localStorage.getItem(K); if (s) { const p = JSON.parse(s); S = { ...S, ...p }; } } catch (e) {} }
-      function save() { clearTimeout(window._st); window._st = setTimeout(() => { try { localStorage.setItem(K, JSON.stringify({ curView: S.curView, tier: S.tier, selConcepts: S.selConcepts, compDeals: S.compDeals, pipeline: S.pipeline, conceptFilter: S.conceptFilter, contacts: S.contacts, msgs: S.msgs, unread: S.unread, smsHistory: S.smsHistory, callHistory: S.callHistory })); } catch (e) {} }, 300); }
-      function showSave() { const d = document.getElementById('saveDot'); if (d) { d.classList.add('visible'); setTimeout(() => d.classList.remove('visible'), 1800); } }
+      function save() { try { localStorage.setItem(K, JSON.stringify({ curView: S.curView, tier: S.tier, selConcepts: S.selConcepts, compDeals: S.compDeals, pipeline: S.pipeline, conceptFilter: S.conceptFilter })); } catch (e) {} }
       function toast(m, t = 3000) { const c = document.getElementById('toastContainer'); const e = document.createElement('div'); e.className = 'toast'; e.innerHTML = m; c.appendChild(e); setTimeout(() => e.remove(), t); }
-      function updateBadge() { const t = Object.values(S.unread).reduce((a, b) => a + (Number(b) || 0), 0); const b = document.getElementById('unreadBadge'); if (b) { b.style.display = t > 0 ? 'flex' : 'none'; b.textContent = t > 99 ? '99+' : String(t); } }
 
-      function marketCtx(a, z) { const b = { hcb: 245, rb: 3100, cr: 0.048, cs: 440, am: 12, ds: 0.65, mn: 'National' }; const al = (a || '').toLowerCase(); if (al.includes('austin')) { b.rb = 3350; b.cs = 465; b.cr = 0.046; b.am = 10; b.ds = 0.78; b.mn = 'Austin MSA'; } else if (al.includes('los angeles')) { b.rb = 3700; b.cs = 590; b.hcb = 320; b.cr = 0.041; b.ds = 0.82; b.mn = 'LA MSA'; } else if (al.includes('miami')) { b.rb = 3200; b.hcb = 270; b.am = 14; b.ds = 0.71; b.mn = 'Miami MSA'; } else if (al.includes('phoenix')) { b.rb = 2800; b.hcb = 225; b.am = 9; b.ds = 0.69; b.mn = 'Phoenix MSA'; } else if (al.includes('denver')) { b.rb = 3000; b.hcb = 260; b.cr = 0.050; b.ds = 0.72; b.mn = 'Denver MSA'; } else if (al.includes('nashville')) { b.rb = 2900; b.hcb = 230; b.cr = 0.052; b.ds = 0.74; b.mn = 'Nashville MSA'; } if ((z || '').includes('TOD')) { b.rb *= 1.08; b.cs *= 1.05; } return b; }
-      function regCtx(c, z) { const d = { ep: 'By-right (6-8 mo)', er: 'low', ns: 0.35, nr: 'Medium', ifu: 18500, ip: 10, prs: 6.2, uc: 'Sustainability Jan 2026', pf: 3200 }; const cl = (c || '').toLowerCase(); if (cl.includes('austin')) { d.ifu = 18500; d.prs = 6.2; } else if (cl.includes('los angeles')) { d.ifu = 25000; d.ip = 15; d.ep = 'Conditional (12-18 mo)'; d.er = 'high'; d.ns = 0.65; d.nr = 'High'; } else if (cl.includes('phoenix')) { d.ifu = 12000; d.ip = 5; d.ep = 'By-right (4-6 mo)'; d.ns = 0.2; d.nr = 'Low'; } if ((z || '').includes('TOD')) { d.ep = 'Expedited (4-5 mo)'; d.ns *= 0.7; } return d; }
+      function marketCtx(a, z) { const b = { hcb: 245, rb: 3100, cr: 0.048, ds: 0.65, mn: 'National' }; const al = (a || '').toLowerCase(); if (al.includes('austin')) { b.rb = 3350; b.cr = 0.046; b.ds = 0.78; b.mn = 'Austin MSA'; } else if (al.includes('los angeles')) { b.rb = 3700; b.hcb = 320; b.cr = 0.041; b.ds = 0.82; b.mn = 'LA MSA'; } else if (al.includes('miami')) { b.rb = 3200; b.hcb = 270; b.ds = 0.71; b.mn = 'Miami MSA'; } else if (al.includes('phoenix')) { b.rb = 2800; b.hcb = 225; b.ds = 0.69; b.mn = 'Phoenix MSA'; } else if (al.includes('denver')) { b.rb = 3000; b.hcb = 260; b.ds = 0.72; b.mn = 'Denver MSA'; } else if (al.includes('nashville')) { b.rb = 2900; b.hcb = 230; b.ds = 0.74; b.mn = 'Nashville MSA'; } if ((z || '').includes('TOD')) { b.rb *= 1.08; } return b; }
+      function regCtx(c, z) { const d = { ep: 'By-right (6-8 mo)', er: 'low', ns: 0.35, nr: 'Medium', ifu: 18500, ip: 10 }; const cl = (c || '').toLowerCase(); if (cl.includes('austin')) { d.ifu = 18500; } else if (cl.includes('los angeles')) { d.ifu = 25000; d.ip = 15; d.ep = 'Conditional (12-18 mo)'; d.er = 'high'; d.nr = 'High'; } else if (cl.includes('phoenix')) { d.ifu = 12000; d.ip = 5; d.ep = 'By-right (4-6 mo)'; d.nr = 'Low'; } if ((z || '').includes('TOD')) { d.ep = 'Expedited (4-5 mo)'; } return d; }
 
       function analyze() {
         const a = document.getElementById('sa')?.value || '800 Congress Ave, Austin TX';
@@ -257,175 +147,121 @@
         const mg2 = sv > 0 ? (pf / sv) * 100 : 0; const phaseMult = ph ? 1.12 : 1.0; const adjROI = roi / phaseMult;
         function cs() { let s = 0; if (adjROI > 30) s += 35; else if (adjROI > 20) s += 25; else if (adjROI > 12) s += 15; else s += 5; if (rg.er === 'low') s += 25; else if (rg.er === 'medium') s += 15; else s += 5; if (mk.ds > 0.75) s += 25; else if (mk.ds > 0.55) s += 15; else s += 5; if (uc > 50) s += 15; else if (uc > 20) s += 10; if (rg.ns < 0.3) s += 10; else if (rg.ns < 0.5) s += 5; return Math.min(100, Math.max(0, Math.round(s))); }
         const ds = cs(); const mt = mk.am < 12 ? 'Strong' : mk.am < 16 ? 'Moderate' : 'Slow';
-        return { ms: { mg, fp, as, ag: effGFA, fs, ss, fl, mh, eff, ecDeduction, rpDeduction, resGFA, retGFA }, yi: { uc, nl, avgUnitSize, agr, egi, noi, rpu, cr, umPct, unitSizes, parkSpaces, afUnits, umBreakdown: [Math.round(uc * umPct[0]), Math.round(uc * umPct[1]), Math.round(uc * umPct[2]), Math.round(uc * umPct[3])] }, fi: { lc, thc, sc, tpc, gdv: sv, pf, roi, mg2, adjROI, effectiveHC, ct, parkCost, afRentLoss, phaseMult, hcp: effectiveHC }, ds, dsl: ds >= 80 ? 'STRONG BUY' : ds >= 60 ? 'BUY' : ds >= 40 ? 'HOLD' : 'PASS', rk: { ep: rg.ep, er: rg.er, nr: rg.nr, mt, prs: rg.prs }, rg: { ifu: rg.ifu, ip: rg.ip, pf: rg.pf, uc: rg.uc, afUnits }, mk, rg, inp: { a, z, fl, mh, ls, lc, hci, mr, ct, pr, umSt, um1, um2, um3, rp, af, ph, ec, sr } };
+        return { ms: { mg, fp, as, ag: effGFA, fl, mh, ecDeduction, rpDeduction, resGFA, retGFA }, yi: { uc, nl, avgUnitSize, egi, noi, rpu, parkSpaces, afUnits, umBreakdown: [Math.round(uc * umPct[0]), Math.round(uc * umPct[1]), Math.round(uc * umPct[2]), Math.round(uc * umPct[3])] }, fi: { tpc, gdv: sv, pf, roi, mg2, adjROI, effectiveHC, ct, parkCost, afRentLoss, phaseMult }, ds, dsl: ds >= 80 ? 'STRONG BUY' : ds >= 60 ? 'BUY' : ds >= 40 ? 'HOLD' : 'PASS', rk: { ep: rg.ep, nr: rg.nr, mt }, inp: { a, z, fl, mh, ls, lc, hci, mr, ct, pr, umSt, um1, um2, um3, rp, af, ph, ec } };
       }
 
       function updateAnalyzerUI() {
         S.analysis = analyze(); const d = S.analysis; const t = S.tier;
-        const me = document.getElementById('mc'); if (me) me.innerHTML = `<strong>FAR:</strong> ${d.ms.fl} | <strong>Footprint:</strong> ${d.ms.fp.toFixed(0)} sf<br><strong>Stories:</strong> ${d.ms.as} (limit ${d.ms.mh}ft) | <strong>GFA:</strong> ${d.ms.ag.toLocaleString()} sf${d.ms.ecDeduction>0?`<br><strong>Elevator:</strong> -${(d.ms.ecDeduction*100).toFixed(0)}%` : ''}${d.ms.rpDeduction>0?` | <strong>Retail:</strong> ${d.ms.retGFA.toLocaleString()} sf` : ''}`;
-        const ye = document.getElementById('yc'); if (ye) ye.innerHTML = `<strong>Units:</strong> ${d.yi.uc} (avg ${d.yi.avgUnitSize.toFixed(0)} sf) | <strong>NLA:</strong> ${d.yi.nl.toLocaleString()} sf<br><strong>Mix:</strong> St: ${d.yi.umBreakdown[0]} | 1BR: ${d.yi.umBreakdown[1]} | 2BR: ${d.yi.umBreakdown[2]} | 3BR: ${d.yi.umBreakdown[3]}${d.yi.parkSpaces>0?`<br><strong>Parking:</strong> ${d.yi.parkSpaces} spaces` : ''}${d.rg.afUnits>0?`<br><strong>Affordable:</strong> ${d.rg.afUnits} units` : ''}${t!=='free'?`<br><strong>EGI:</strong> $${d.yi.egi.toLocaleString()} | <strong>NOI:</strong> $${d.yi.noi.toLocaleString()}` : ''}`;
+        const me = document.getElementById('mc'); if (me) me.innerHTML = `<strong>FAR:</strong> ${d.ms.fl} | <strong>Stories:</strong> ${d.ms.as} | <strong>GFA:</strong> ${d.ms.ag.toLocaleString()} sf`;
+        const ye = document.getElementById('yc'); if (ye) ye.innerHTML = `<strong>Units:</strong> ${d.yi.uc} | <strong>NLA:</strong> ${d.yi.nl.toLocaleString()} sf<br><strong>Mix:</strong> St: ${d.yi.umBreakdown[0]} | 1BR: ${d.yi.umBreakdown[1]} | 2BR: ${d.yi.umBreakdown[2]} | 3BR: ${d.yi.umBreakdown[3]}${t!=='free'?`<br><strong>EGI:</strong> $${d.yi.egi.toLocaleString()} | <strong>NOI:</strong> $${d.yi.noi.toLocaleString()}` : ''}`;
         const ge = document.getElementById('gv'); const ce = document.getElementById('tc'); const pe = document.getElementById('pv'); const re = document.getElementById('rv');
         if (ge) ge.textContent = t !== 'free' ? '$' + d.fi.gdv.toLocaleString() : '$---';
         if (ce) ce.textContent = t !== 'free' ? '$' + d.fi.tpc.toLocaleString() : '$---';
         if (pe) pe.textContent = t !== 'free' ? '$' + d.fi.pf.toLocaleString() : '$---';
-        if (re) re.textContent = t !== 'free' ? d.fi.roi.toFixed(1) + '% | ' + d.fi.mg2.toFixed(1) + '%' : '--%';
+        if (re) re.textContent = t !== 'free' ? d.fi.roi.toFixed(1) + '%' : '--%';
         const ds = document.getElementById('ds'); const dc = document.getElementById('dc');
-        if (ds && dc) { ds.style.display = t === 'deep' ? 'block' : 'none'; if (t === 'deep') dc.innerHTML = `<strong>Sensitivity:</strong> ±15% → $${(d.fi.pf*0.7).toLocaleString()}–$${(d.fi.pf*1.3).toLocaleString()}<br><strong>Construction:</strong> ${d.fi.ct} @ $${d.fi.hcp}/sf | <strong>Parking:</strong> $${d.fi.parkCost.toLocaleString()}<br><strong>Phased:</strong> ${d.fi.phaseMult>1?'+12% premium':'Single'} | <strong>Affordable loss:</strong> $${d.fi.afRentLoss.toLocaleString()}`; }
+        if (ds && dc) { ds.style.display = t === 'deep' ? 'block' : 'none'; if (t === 'deep') dc.innerHTML = `<strong>Sensitivity:</strong> ±15% → $${(d.fi.pf*0.7).toLocaleString()}–$${(d.fi.pf*1.3).toLocaleString()}`; }
         const lb = document.getElementById('lb'); const rc = document.getElementById('rc');
         if (lb && rc) { lb.style.display = t === 'free' ? 'block' : 'none'; rc.classList.toggle('locked', t === 'free'); }
-        const ev = document.getElementById('ev'); const nv = document.getElementById('nv'); const mv = document.getElementById('mv');
-        if (ev) ev.textContent = d.rk.ep; if (nv) nv.textContent = d.rk.nr; if (mv) mv.textContent = d.rk.mt;
-        const sc = document.getElementById('sc'); const sl = document.getElementById('scl');
-        if (sc) { sc.textContent = d.ds; animateValue(sc, 0, d.ds, 1000); } if (sl) sl.textContent = d.dsl;
-        save(); showSave();
+        save();
       }
 
-      function animateValue(el, start, end, dur) { if (!el) return; const rng = end - start; const inc = rng / (dur / 16); let cur = start; const tmr = setInterval(() => { cur += inc; if ((inc > 0 && cur >= end) || (inc < 0 && cur <= end)) { cur = end; clearInterval(tmr); } el.textContent = Math.round(cur); }, 16); }
       function setTier(t) { S.tier = t; updateAnalyzerUI(); toast(`Tier: <strong>${t==='free'?'Free':t==='full'?'Full ($499)':'Deep ($1,499)'}</strong>`); }
       function setCF(type, val) { S.conceptFilter[type] = val; save(); render('concepts'); }
-      function addComp(did) { const d = S.pipeline.find(x => x.id === did); if (d && !S.compDeals.find(x => x.id === did)) { if (S.compDeals.length >= 3) S.compDeals.shift(); S.compDeals.push(d); toast(`Added <strong>${d.n}</strong>`); save(); render('finance'); } }
-      function removeComp(did) { S.compDeals = S.compDeals.filter(x => x.id !== did); save(); render('finance'); }
 
       const CL = [
         { id: 1, n: 'Modern Glass Tower', s: 'modern', ind: 'mixed-use', sc: 'large', ic: 'fa-building', ba: 'best-roi', bt: 'BEST ROI', ur: '60-200', re: '+3.2%', ds: 'Full curtain wall with cantilevered balconies.' },
         { id: 2, n: 'Miami Modern', s: 'modern', ind: 'hospitality', sc: 'large', ic: 'fa-umbrella-beach', ba: '', bt: '', ur: '30-100', re: '+1.5%', ds: 'Pastel panels, curved corners, resort-style.' },
-        { id: 3, n: 'Scandi Minimal Office', s: 'modern', ind: 'office', sc: 'medium', ic: 'fa-tree', ba: '', bt: '', ur: '20-60', re: '+0.8%', ds: 'Light wood slats, large windows, co-working ready.' },
-        { id: 4, n: 'Modern Courtyard Living', s: 'modern', ind: 'multifamily', sc: 'medium', ic: 'fa-city', ba: 'best-fit', bt: 'BEST FIT', ur: '30-90', re: '+1.8%', ds: 'Clean lines with central landscaped courtyard.' },
-        { id: 5, n: 'Glass Office Pavilion', s: 'modern', ind: 'office', sc: 'small', ic: 'fa-building', ba: '', bt: '', ur: '8-25', re: '+0.6%', ds: 'Floor-to-ceiling glass with flexible layouts.' },
-        { id: 6, n: 'Resort Modern Hotel', s: 'modern', ind: 'hospitality', sc: 'medium', ic: 'fa-hotel', ba: 'premium', bt: 'LUXURY', ur: '40-120', re: '+2.5%', ds: 'Dramatic porte-cochère with water feature.' },
-        { id: 7, n: 'Urban Industrial Loft', s: 'industrial', ind: 'mixed-use', sc: 'large', ic: 'fa-industry', ba: '', bt: '', ur: '40-120', re: '+0.5%', ds: 'Exposed steel, factory windows, polished concrete.' },
-        { id: 8, n: 'Concrete Brutalist', s: 'industrial', ind: 'mixed-use', sc: 'large', ic: 'fa-cubes', ba: '', bt: '', ur: '30-80', re: '-0.3%', ds: 'Board-formed concrete, monumental scale.' },
-        { id: 9, n: 'Steel Frame Office', s: 'industrial', ind: 'office', sc: 'large', ic: 'fa-warehouse', ba: '', bt: '', ur: '40-150', re: '+0.8%', ds: 'Steel frame with flexible floor plates.' },
-        { id: 10, n: 'Adaptive Reuse Hotel', s: 'industrial', ind: 'hospitality', sc: 'medium', ic: 'fa-hotel', ba: '', bt: '', ur: '30-80', re: '+1.5%', ds: 'Converted warehouse with industrial chic.' },
-        { id: 11, n: 'Timber Frame Industrial', s: 'industrial', ind: 'multifamily', sc: 'small', ic: 'fa-home', ba: '', bt: '', ur: '8-20', re: '+0.3%', ds: 'Heavy timber, loft-style units, clerestory windows.' },
-        { id: 12, n: 'Foundry Creative Office', s: 'industrial', ind: 'office', sc: 'small', ic: 'fa-briefcase', ba: '', bt: '', ur: '8-25', re: '+0.4%', ds: 'Converted foundry with soaring ceilings.' },
-        { id: 13, n: 'Warm Brick + Metal', s: 'warm', ind: 'multifamily', sc: 'medium', ic: 'fa-warehouse', ba: 'best-fit', bt: 'BEST FIT', ur: '30-100', re: '+1.8%', ds: 'Contextual brick with metal accent panels.' },
-        { id: 14, n: 'Craftsman Revival', s: 'warm', ind: 'multifamily', sc: 'small', ic: 'fa-home', ba: 'best-fit', bt: 'CONTEXTUAL', ur: '8-25', re: '+0.2%', ds: 'Wood detailing, covered porches, stone accents.' },
-        { id: 15, n: 'Farmhouse Modern', s: 'warm', ind: 'multifamily', sc: 'small', ic: 'fa-tractor', ba: '', bt: '', ur: '8-20', re: '-0.5%', ds: 'Board and batten, black windows, wraparound porches.' },
-        { id: 16, n: 'Timber Creative Office', s: 'warm', ind: 'office', sc: 'medium', ic: 'fa-tree', ba: '', bt: '', ur: '15-40', re: '+0.5%', ds: 'Exposed timber beams, warm wood interiors.' },
-        { id: 17, n: 'Boutique Brick Hotel', s: 'warm', ind: 'hospitality', sc: 'medium', ic: 'fa-hotel', ba: 'best-fit', bt: 'CHARMING', ur: '20-60', re: '+1.8%', ds: 'Exposed brick, intimate courtyard, local art.' },
+        { id: 3, n: 'Scandi Minimal Office', s: 'modern', ind: 'office', sc: 'medium', ic: 'fa-tree', ba: '', bt: '', ur: '20-60', re: '+0.8%', ds: 'Light wood slats, large windows.' },
+        { id: 4, n: 'Modern Courtyard Living', s: 'modern', ind: 'multifamily', sc: 'medium', ic: 'fa-city', ba: 'best-fit', bt: 'BEST FIT', ur: '30-90', re: '+1.8%', ds: 'Clean lines with central courtyard.' },
+        { id: 5, n: 'Glass Office Pavilion', s: 'modern', ind: 'office', sc: 'small', ic: 'fa-building', ba: '', bt: '', ur: '8-25', re: '+0.6%', ds: 'Floor-to-ceiling glass.' },
+        { id: 6, n: 'Resort Modern Hotel', s: 'modern', ind: 'hospitality', sc: 'medium', ic: 'fa-hotel', ba: 'premium', bt: 'LUXURY', ur: '40-120', re: '+2.5%', ds: 'Dramatic porte-cochère.' },
+        { id: 7, n: 'Urban Industrial Loft', s: 'industrial', ind: 'mixed-use', sc: 'large', ic: 'fa-industry', ba: '', bt: '', ur: '40-120', re: '+0.5%', ds: 'Exposed steel, factory windows.' },
+        { id: 8, n: 'Concrete Brutalist', s: 'industrial', ind: 'mixed-use', sc: 'large', ic: 'fa-cubes', ba: '', bt: '', ur: '30-80', re: '-0.3%', ds: 'Board-formed concrete.' },
+        { id: 9, n: 'Steel Frame Office', s: 'industrial', ind: 'office', sc: 'large', ic: 'fa-warehouse', ba: '', bt: '', ur: '40-150', re: '+0.8%', ds: 'Steel frame, flexible floor plates.' },
+        { id: 10, n: 'Adaptive Reuse Hotel', s: 'industrial', ind: 'hospitality', sc: 'medium', ic: 'fa-hotel', ba: '', bt: '', ur: '30-80', re: '+1.5%', ds: 'Converted warehouse, industrial chic.' },
+        { id: 11, n: 'Timber Frame Industrial', s: 'industrial', ind: 'multifamily', sc: 'small', ic: 'fa-home', ba: '', bt: '', ur: '8-20', re: '+0.3%', ds: 'Heavy timber, loft-style units.' },
+        { id: 12, n: 'Foundry Creative Office', s: 'industrial', ind: 'office', sc: 'small', ic: 'fa-briefcase', ba: '', bt: '', ur: '8-25', re: '+0.4%', ds: 'Converted foundry, soaring ceilings.' },
+        { id: 13, n: 'Warm Brick + Metal', s: 'warm', ind: 'multifamily', sc: 'medium', ic: 'fa-warehouse', ba: 'best-fit', bt: 'BEST FIT', ur: '30-100', re: '+1.8%', ds: 'Contextual brick with metal accents.' },
+        { id: 14, n: 'Craftsman Revival', s: 'warm', ind: 'multifamily', sc: 'small', ic: 'fa-home', ba: 'best-fit', bt: 'CONTEXTUAL', ur: '8-25', re: '+0.2%', ds: 'Wood detailing, covered porches.' },
+        { id: 15, n: 'Farmhouse Modern', s: 'warm', ind: 'multifamily', sc: 'small', ic: 'fa-tractor', ba: '', bt: '', ur: '8-20', re: '-0.5%', ds: 'Board and batten, black windows.' },
+        { id: 16, n: 'Timber Creative Office', s: 'warm', ind: 'office', sc: 'medium', ic: 'fa-tree', ba: '', bt: '', ur: '15-40', re: '+0.5%', ds: 'Exposed timber beams, warm wood.' },
+        { id: 17, n: 'Boutique Brick Hotel', s: 'warm', ind: 'hospitality', sc: 'medium', ic: 'fa-hotel', ba: 'best-fit', bt: 'CHARMING', ur: '20-60', re: '+1.8%', ds: 'Exposed brick, intimate courtyard.' },
         { id: 18, n: 'Warm Mixed-Use Corner', s: 'warm', ind: 'mixed-use', sc: 'medium', ic: 'fa-store', ba: '', bt: '', ur: '20-50', re: '+1.2%', ds: 'Corner building with ground-floor café.' },
-        { id: 19, n: 'Green Terrace Living', s: 'specialty', ind: 'multifamily', sc: 'medium', ic: 'fa-leaf', ba: 'premium', bt: 'PREMIUM', ur: '30-90', re: '+2.1%', ds: 'Living walls, sky gardens, targeting LEED Platinum.' },
-        { id: 20, n: 'Biophilic Tower', s: 'specialty', ind: 'mixed-use', sc: 'large', ic: 'fa-seedling', ba: 'premium', bt: 'LUXURY', ur: '50-150', re: '+4.1%', ds: 'Vertical gardens, natural materials, wellness-focused.' },
-        { id: 21, n: 'Art Deco Revival', s: 'specialty', ind: 'hospitality', sc: 'medium', ic: 'fa-star', ba: 'premium', bt: 'ICONIC', ur: '20-60', re: '+2.7%', ds: 'Stepped massing, geometric ornamentation.' },
-        { id: 22, n: 'Parametric Landmark', s: 'specialty', ind: 'office', sc: 'large', ic: 'fa-crown', ba: 'premium', bt: 'LANDMARK', ur: '40-180', re: '+3.5%', ds: 'Algorithmically generated facade, unique identity.' },
-        { id: 23, n: 'Eco-Hospitality Retreat', s: 'specialty', ind: 'hospitality', sc: 'small', ic: 'fa-spa', ba: 'premium', bt: 'BOUTIQUE', ur: '10-30', re: '+2.3%', ds: 'Fully sustainable, carbon-neutral operations.' },
-        { id: 24, n: 'Living Building Mixed-Use', s: 'specialty', ind: 'mixed-use', sc: 'small', ic: 'fa-sun', ba: 'premium', bt: 'NET ZERO', ur: '8-25', re: '+1.8%', ds: 'Net-zero energy, Living Building certified.' },
+        { id: 19, n: 'Green Terrace Living', s: 'specialty', ind: 'multifamily', sc: 'medium', ic: 'fa-leaf', ba: 'premium', bt: 'PREMIUM', ur: '30-90', re: '+2.1%', ds: 'Living walls, sky gardens.' },
+        { id: 20, n: 'Biophilic Tower', s: 'specialty', ind: 'mixed-use', sc: 'large', ic: 'fa-seedling', ba: 'premium', bt: 'LUXURY', ur: '50-150', re: '+4.1%', ds: 'Vertical gardens, natural materials.' },
+        { id: 21, n: 'Art Deco Revival', s: 'specialty', ind: 'hospitality', sc: 'medium', ic: 'fa-star', ba: 'premium', bt: 'ICONIC', ur: '20-60', re: '+2.7%', ds: 'Stepped massing, geometric ornament.' },
+        { id: 22, n: 'Parametric Landmark', s: 'specialty', ind: 'office', sc: 'large', ic: 'fa-crown', ba: 'premium', bt: 'LANDMARK', ur: '40-180', re: '+3.5%', ds: 'Algorithmically generated facade.' },
+        { id: 23, n: 'Eco-Hospitality Retreat', s: 'specialty', ind: 'hospitality', sc: 'small', ic: 'fa-spa', ba: 'premium', bt: 'BOUTIQUE', ur: '10-30', re: '+2.3%', ds: 'Fully sustainable, carbon-neutral.' },
+        { id: 24, n: 'Living Building Mixed-Use', s: 'specialty', ind: 'mixed-use', sc: 'small', ic: 'fa-sun', ba: 'premium', bt: 'NET ZERO', ur: '8-25', re: '+1.8%', ds: 'Net-zero energy and water.' },
       ];
 
-      function filtC() {
-        const f = S.conceptFilter;
-        return CL.filter(c => {
-          if (f.style !== 'all' && c.s !== f.style) return false;
-          if (f.industry !== 'all' && c.ind !== f.industry) return false;
-          if (f.scale !== 'all' && c.sc !== f.scale) return false;
-          return true;
-        });
-      }
-
-      function previewConcept(cid) { const c = CL.find(x => x.id === cid); if (!c) return; toast(`🎨 <strong>${c.n}</strong><br>${c.ds}<br>${c.ur} units | ROI: ${c.re} | <strong>$1,999</strong>`, 6000); }
-      function purchaseConcept(cid) { const c = CL.find(x => x.id === cid); if (c) { toast(`✅ <strong>${c.n}</strong> purchased!`, 4000); S.selConcepts = []; save(); render('concepts'); } }
-
-      function openChat(cid) { S.activeChat = cid; S.unread[cid] = 0; const ct = S.contacts.find(c => c.id === cid); if (ct) ct.un = 0; save(); updateBadge(); toast(`💬 Chat with <strong>${ct?.n||'Contact'}</strong>`, 2000); }
-      function openGlobalChat() { const f = S.contacts.find(c => (S.unread[c.id] || 0) > 0); openChat(f ? f.id : (S.contacts[0]?.id || 'c1')); }
+      function filtC() { const f = S.conceptFilter; return CL.filter(c => { if (f.style !== 'all' && c.s !== f.style) return false; if (f.industry !== 'all' && c.ind !== f.industry) return false; if (f.scale !== 'all' && c.sc !== f.scale) return false; return true; }); }
+      function previewConcept(cid) { const c = CL.find(x => x.id === cid); if (!c) return; toast(`<strong>${c.n}</strong><br>${c.ds}<br>${c.ur} units | ROI: ${c.re} | $1,999`, 5000); }
 
       function render(vn) {
-        S.curView = vn; const a = document.getElementById('contentArea');
-        if (!a || !views[vn]) return;
-        a.innerHTML = views[vn]();
-        if (vn === 'analyzer') setTimeout(updateAnalyzerUI, 80);
-        if (vn === 'dashboard') setTimeout(() => { const sc = document.getElementById('sc'); const sl = document.getElementById('scl'); if (S.analysis && sc) { sc.textContent = S.analysis.ds; animateValue(sc, 0, S.analysis.ds, 1000); } if (S.analysis && sl) sl.textContent = S.analysis.dsl; }, 80);
-        requestAnimationFrame(() => { document.querySelectorAll('.card').forEach(c => { const r = c.getBoundingClientRect(); if (r.top < window.innerHeight - 50) c.classList.add('visible'); }); });
+        S.curView = vn; const a = document.getElementById('contentArea'); if (!a || !views[vn]) return;
+        a.innerHTML = views[vn](); if (vn === 'analyzer') setTimeout(updateAnalyzerUI, 80);
         save();
       }
 
       const views = {
-        dashboard: () => { const d = S.analysis || analyze(); return `
-          <div class="grid-2">
-            <div class="card"><div class="card-header"><i class="fas fa-tachometer-alt"></i> DEAL SCORE™</div><div class="score-dial" id="sc">${d.ds}</div><p style="text-align:center;color:var(--gold);font-weight:700;font-family:var(--font-display);" id="scl">${d.dsl}</p></div>
-            <div class="card"><div class="card-header"><i class="fas fa-list-ul"></i> PIPELINE <span class="chip">${S.pipeline.length}</span></div>${S.pipeline.map(dl=>`<div class="pipeline-item"><span>${dl.n}</span><span class="tag">${dl.st}</span><span style="color:var(--gold);">${dl.sc}</span><button class="btn btn-gold btn-sm" onclick="addComp(${dl.id})">+</button></div>`).join('')}</div>
-            <div class="card"><div class="card-header"><i class="fas fa-paint-brush"></i> CONCEPTS <span class="chip">24</span></div><div style="display:flex;gap:0.5rem;flex-wrap:wrap;">${CL.slice(0,6).map(c=>`<div style="text-align:center;cursor:pointer;" onclick="previewConcept(${c.id})"><div style="width:38px;height:38px;border-radius:50%;border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;margin:0 auto;"><i class="fas fa-${c.ic}"></i></div><span style="font-size:0.4rem;color:var(--text-muted);">${c.n.split(' ')[0]}</span></div>`).join('')}</div></div>
-            <div class="card"><div class="card-header"><i class="fas fa-comments"></i> MESSAGES</div>${S.contacts.filter(c=>(S.unread[c.id]||0)>0).slice(0,3).map(c=>`<div class="pipeline-item" style="cursor:pointer;" onclick="openChat('${c.id}')"><span>${c.av} ${c.n}</span><span class="tag gold">${S.unread[c.id]}</span></div>`).join('')||'<p style="font-size:0.55rem;color:var(--text-muted);">No unread</p>'}</div>
-          </div>`; },
+        dashboard: () => { const d = S.analysis || analyze(); return `<div class="grid-2"><div class="card"><div class="card-header">DEAL SCORE</div><div class="score-dial">${d.ds}</div><p style="text-align:center;color:var(--gold);font-weight:700;">${d.dsl}</p></div><div class="card"><div class="card-header">PIPELINE</div><p style="color:var(--text-muted);font-size:0.6rem;">Add your first deal in the Analyzer tab.</p></div></div>`; },
         analyzer: () => `
           <div class="grid-2">
-            <div class="card"><div class="card-header"><i class="fas fa-file-signature"></i> PARAMETERS <span class="chip">AI</span></div>
+            <div class="card"><div class="card-header">PARAMETERS</div>
               <div class="form-grid">
                 <div class="field span-3"><label>ADDRESS</label><input id="sa" placeholder="Enter address..." onchange="updateAnalyzerUI()"></div>
-                <div class="field"><label>ZONING</label><select id="sz" onchange="updateAnalyzerUI()"><option value="R-MF" ${(S.analysis?.inp?.z||'C-MU')==='R-MF'?'selected':''}>Res MF</option><option value="C-MU" ${(S.analysis?.inp?.z||'C-MU')==='C-MU'?'selected':''}>Mixed-Use</option><option value="D-TOD" ${(S.analysis?.inp?.z||'')==='D-TOD'?'selected':''}>TOD</option><option value="I-L">Industrial</option></select></div>
-                <div class="field"><label>FAR</label><input id="sf" type="number" value="${S.analysis?.inp?.fl||4.0}" step="0.1" onchange="updateAnalyzerUI()"></div>
-                <div class="field"><label>HEIGHT</label><input id="sh" type="number" value="${S.analysis?.inp?.mh||90}" onchange="updateAnalyzerUI()"></div>
-                <div class="field"><label>LOT (SF)</label><input id="sl" type="number" value="${S.analysis?.inp?.ls||24000}" onchange="updateAnalyzerUI()"></div>
-                <div class="field"><label>SETBACKS</label><input id="ss" value="${S.analysis?.inp?.sr||'15 / 10'}" onchange="updateAnalyzerUI()"></div>
-                <div class="field"><label>LAND COST</label><input id="slc" type="number" value="${S.analysis?.inp?.lc||2100000}" onchange="updateAnalyzerUI()"></div>
-                <div class="field"><label>CONSTRUCTION</label><select id="sct" onchange="updateAnalyzerUI()"><option value="wood" ${(S.analysis?.inp?.ct||'concrete')==='wood'?'selected':''}>Wood ($200/sf)</option><option value="concrete" ${(S.analysis?.inp?.ct||'concrete')==='concrete'?'selected':''}>Concrete ($280/sf)</option><option value="steel" ${(S.analysis?.inp?.ct||'')==='steel'?'selected':''}>Steel ($340/sf)</option></select></div>
-                <div class="field"><label>COST/SF OVERRIDE</label><input id="shc" type="number" value="${S.analysis?.inp?.hci||255}" onchange="updateAnalyzerUI()"></div>
-                <div class="field"><label>RENT/UNIT</label><input id="smr" type="number" value="${S.analysis?.inp?.mr||3300}" onchange="updateAnalyzerUI()"></div>
-                <div class="field"><label>PARKING</label><select id="spr" onchange="updateAnalyzerUI()"><option value="0.5" ${(S.analysis?.inp?.pr||1.0)==0.5?'selected':''}>0.5 (TOD)</option><option value="1.0" ${(S.analysis?.inp?.pr||1.0)==1.0?'selected':''}>1.0 (Std)</option><option value="1.5" ${(S.analysis?.inp?.pr||1.0)==1.5?'selected':''}>1.5 (Suburb)</option><option value="2.0" ${(S.analysis?.inp?.pr||1.0)==2.0?'selected':''}>2.0 (Luxury)</option></select></div>
-                <div class="field"><label>RETAIL %</label><input id="srp" type="range" min="0" max="40" value="${S.analysis?.inp?.rp||15}" onchange="updateAnalyzerUI();document.getElementById('rpv').textContent=this.value+'%'"><span id="rpv" style="font-size:0.5rem;color:var(--gold);">${S.analysis?.inp?.rp||15}%</span></div>
-                <div class="field"><label>AFFORDABLE %</label><input id="saf" type="range" min="0" max="30" value="${S.analysis?.inp?.af||10}" onchange="updateAnalyzerUI();document.getElementById('afv').textContent=this.value+'%'"><span id="afv" style="font-size:0.5rem;color:var(--warning);">${S.analysis?.inp?.af||10}%</span></div>
-                <div class="field"><label>PHASED?</label><select id="sph" onchange="updateAnalyzerUI()"><option value="false" ${!S.analysis?.inp?.ph?'selected':''}>Single</option><option value="true" ${S.analysis?.inp?.ph?'selected':''}>Multi (+12%)</option></select></div>
-                <div class="field"><label>ELEVATOR?</label><select id="sec" onchange="updateAnalyzerUI()"><option value="false" ${!S.analysis?.inp?.ec?'selected':''}>No</option><option value="true" ${S.analysis?.inp?.ec!==false?'selected':''}>Yes</option></select></div>
-                <div class="field span-3"><label>UNIT MIX % (St / 1BR / 2BR / 3BR)</label><div style="display:flex;gap:0.4rem;"><input id="sumSt" type="number" value="${S.analysis?.inp?.umSt||15}" onchange="updateAnalyzerUI()" style="flex:1;" placeholder="St"><input id="sum1" type="number" value="${S.analysis?.inp?.um1||40}" onchange="updateAnalyzerUI()" style="flex:1;" placeholder="1BR"><input id="sum2" type="number" value="${S.analysis?.inp?.um2||35}" onchange="updateAnalyzerUI()" style="flex:1;" placeholder="2BR"><input id="sum3" type="number" value="${S.analysis?.inp?.um3||10}" onchange="updateAnalyzerUI()" style="flex:1;" placeholder="3BR"></div></div>
+                <div class="field"><label>ZONING</label><select id="sz" onchange="updateAnalyzerUI()"><option value="C-MU">Mixed-Use</option><option value="R-MF">Res MF</option><option value="D-TOD">TOD</option></select></div>
+                <div class="field"><label>FAR</label><input id="sf" type="number" value="4.0" step="0.1" onchange="updateAnalyzerUI()"></div>
+                <div class="field"><label>HEIGHT</label><input id="sh" type="number" value="90" onchange="updateAnalyzerUI()"></div>
+                <div class="field"><label>LOT (SF)</label><input id="sl" type="number" value="24000" onchange="updateAnalyzerUI()"></div>
+                <div class="field"><label>SETBACKS</label><input id="ss" value="15 / 10" onchange="updateAnalyzerUI()"></div>
+                <div class="field"><label>LAND COST</label><input id="slc" type="number" value="2100000" onchange="updateAnalyzerUI()"></div>
+                <div class="field"><label>CONSTRUCTION</label><select id="sct" onchange="updateAnalyzerUI()"><option value="wood">Wood ($200/sf)</option><option value="concrete" selected>Concrete ($280/sf)</option><option value="steel">Steel ($340/sf)</option></select></div>
+                <div class="field"><label>COST/SF</label><input id="shc" type="number" value="255" onchange="updateAnalyzerUI()"></div>
+                <div class="field"><label>RENT/UNIT</label><input id="smr" type="number" value="3300" onchange="updateAnalyzerUI()"></div>
+                <div class="field"><label>PARKING</label><select id="spr" onchange="updateAnalyzerUI()"><option value="0.5">0.5 (TOD)</option><option value="1.0" selected>1.0 (Std)</option><option value="1.5">1.5 (Suburb)</option></select></div>
+                <div class="field"><label>RETAIL %</label><input id="srp" type="range" min="0" max="40" value="15" onchange="updateAnalyzerUI()"></div>
+                <div class="field"><label>AFFORDABLE %</label><input id="saf" type="range" min="0" max="30" value="10" onchange="updateAnalyzerUI()"></div>
+                <div class="field"><label>PHASED?</label><select id="sph" onchange="updateAnalyzerUI()"><option value="false">Single</option><option value="true">Multi (+12%)</option></select></div>
+                <div class="field"><label>ELEVATOR?</label><select id="sec" onchange="updateAnalyzerUI()"><option value="false">No</option><option value="true" selected>Yes</option></select></div>
+                <div class="field span-3"><label>UNIT MIX % (St / 1BR / 2BR / 3BR)</label><div style="display:flex;gap:0.4rem;"><input id="sumSt" type="number" value="15" onchange="updateAnalyzerUI()" style="flex:1;" placeholder="St"><input id="sum1" type="number" value="40" onchange="updateAnalyzerUI()" style="flex:1;" placeholder="1BR"><input id="sum2" type="number" value="35" onchange="updateAnalyzerUI()" style="flex:1;" placeholder="2BR"><input id="sum3" type="number" value="10" onchange="updateAnalyzerUI()" style="flex:1;" placeholder="3BR"></div></div>
               </div>
-              <div style="display:flex;gap:0.3rem;margin-top:0.6rem;"><button class="btn btn-gold" style="flex:1;" onclick="setTier('free')">🔍 FREE</button><button class="btn btn-gold" style="flex:1;" onclick="setTier('full')">📊 $499</button><button class="btn btn-gold" style="flex:1;" onclick="setTier('deep')">🧬 $1,499</button></div>
+              <div style="display:flex;gap:0.3rem;margin-top:0.6rem;"><button class="btn btn-gold" style="flex:1;" onclick="setTier('free')">FREE</button><button class="btn btn-gold" style="flex:1;" onclick="setTier('full')">FULL $499</button><button class="btn btn-gold" style="flex:1;" onclick="setTier('deep')">DEEP $1,499</button></div>
             </div>
-            <div class="card lock-overlay" id="rc"><div id="lb" class="lock-badge">🔒 UNLOCK</div><div class="card-header"><i class="fas fa-chart-pie"></i> RESULTS <span class="chip">LIVE</span></div><div class="metric"><span class="metric-label">GDV</span><span class="metric-value" id="gv">$---</span></div><div class="metric"><span class="metric-label">COST</span><span class="metric-value" id="tc">$---</span></div><div class="metric"><span class="metric-label">PROFIT</span><span class="metric-value green" id="pv">$---</span></div><div class="metric"><span class="metric-label">ROI</span><span class="metric-value" id="rv">--%</span></div><hr style="border-color:rgba(255,255,255,0.05);"><div style="font-weight:600;color:var(--gold);font-size:0.65rem;">MASSING</div><div class="study-box" id="mc"></div><div style="font-weight:600;color:var(--gold);font-size:0.65rem;margin-top:0.3rem;">YIELD</div><div class="study-box" id="yc"></div><div id="ds" style="display:none;"><hr><div style="font-weight:600;color:var(--gold);font-size:0.65rem;">DEEP</div><div class="study-box" id="dc"></div></div></div>
-            <div class="card" style="grid-column:1/-1;"><div class="card-header">RISK</div><div style="display:flex;gap:1rem;flex-wrap:wrap;font-size:0.6rem;"><div><span style="color:var(--text-muted);">ENTITLEMENT:</span> <span id="ev" style="font-weight:600;">-</span></div><div><span style="color:var(--text-muted);">NIMBY:</span> <span id="nv" style="font-weight:600;">-</span></div><div><span style="color:var(--text-muted);">MARKET:</span> <span id="mv" style="font-weight:600;">-</span></div></div></div>
+            <div class="card lock-overlay" id="rc"><div id="lb" class="lock-badge">UNLOCK</div><div class="card-header">RESULTS</div><div class="metric"><span class="metric-label">GDV</span><span class="metric-value" id="gv">$---</span></div><div class="metric"><span class="metric-label">COST</span><span class="metric-value" id="tc">$---</span></div><div class="metric"><span class="metric-label">PROFIT</span><span class="metric-value green" id="pv">$---</span></div><div class="metric"><span class="metric-label">ROI</span><span class="metric-value" id="rv">--%</span></div><div style="font-weight:600;color:var(--gold);font-size:0.65rem;">MASSING</div><div class="study-box" id="mc"></div><div style="font-weight:600;color:var(--gold);font-size:0.65rem;margin-top:0.3rem;">YIELD</div><div class="study-box" id="yc"></div><div id="ds" style="display:none;"><div style="font-weight:600;color:var(--gold);font-size:0.65rem;">DEEP</div><div class="study-box" id="dc"></div></div></div>
           </div>`,
-        concepts: () => { const filtered = filtC(); return `
-          <div class="card" style="grid-column:1/-1;"><div class="card-header"><i class="fas fa-paint-brush"></i> CONCEPT GALLERY — 24 STYLES <span class="chip">$1,999/PKG</span></div>
-            <div class="filter-bar"><span style="color:var(--text-muted);font-size:0.5rem;font-weight:600;">STYLE:</span>${['all','modern','industrial','warm','specialty'].map(s=>`<button class="filter-btn ${S.conceptFilter.style===s?'on':''}" onclick="setCF('style','${s}')">${s==='all'?'All':s.charAt(0).toUpperCase()+s.slice(1)}</button>`).join('')}<span style="color:var(--text-muted);font-size:0.5rem;font-weight:600;margin-left:0.5rem;">INDUSTRY:</span>${['all','multifamily','mixed-use','office','hospitality'].map(s=>`<button class="filter-btn ${S.conceptFilter.industry===s?'on':''}" onclick="setCF('industry','${s}')">${s==='all'?'All':s.charAt(0).toUpperCase()+s.slice(1)}</button>`).join('')}<span style="color:var(--text-muted);font-size:0.5rem;font-weight:600;margin-left:0.5rem;">SCALE:</span>${['all','small','medium','large'].map(s=>`<button class="filter-btn ${S.conceptFilter.scale===s?'on':''}" onclick="setCF('scale','${s}')">${s==='all'?'All':s.charAt(0).toUpperCase()+s.slice(1)}</button>`).join('')}</div>
-            ${filtered.length === 0 ? `<div class="empty-state"><i class="fas fa-search"></i><p>No concepts match these filters.</p><button class="btn btn-gold btn-sm" style="margin-top:0.5rem;" onclick="setCF('style','all');setCF('industry','all');setCF('scale','all');">RESET FILTERS</button></div>` : `<div class="concept-grid">${filtered.map(c=>`<div class="concept-card ${S.selConcepts.includes(c.id)?'selected':''}" onclick="previewConcept(${c.id})"><div class="concept-img"><i class="fas fa-${c.ic}"></i>${c.ba?`<span class="concept-badge ${c.ba==='best-roi'?'badge-roi':c.ba==='best-fit'?'badge-fit':'badge-premium'}">${c.bt}</span>`:''}</div><div class="concept-info"><h4>${c.n}</h4><div style="display:flex;gap:0.2rem;"><span class="tag">${c.ur}u</span><span class="tag gold">${c.re}</span></div><div style="display:flex;gap:0.2rem;margin-top:0.3rem;"><button class="btn btn-gold btn-sm" style="flex:1;" onclick="event.stopPropagation();previewConcept(${c.id})">👁</button><button class="btn btn-gold fill btn-sm" style="flex:1;" onclick="event.stopPropagation();purchaseConcept(${c.id})">$1,999</button></div></div></div>`).join('')}</div><div style="font-size:0.5rem;color:var(--text-muted);margin-top:0.5rem;text-align:center;">${filtered.length} of 24 concepts</div>`}
-          </div>`; },
-        finance: () => `
-          <div class="grid-2">
-            <div class="card"><div class="card-header"><i class="fas fa-coins"></i> CAPITAL STACK</div>${[{l:'Senior Debt',v:65},{l:'Mezzanine',v:15},{l:'Pref Equity',v:10},{l:'Sponsor',v:10}].map(x=>`<div class="slider-row"><span>${x.l}</span><input type="range" value="${x.v}"><span class="val">${x.v}%</span></div>`).join('')}<div class="study-box"><strong>WACC:</strong> 9.8% · <strong>DSCR:</strong> 1.42x</div></div>
-            <div class="card"><div class="card-header"><i class="fas fa-sliders-h"></i> SCENARIOS</div><table style="width:100%;font-size:0.55rem;border-collapse:collapse;"><tr><th style="text-align:left;"> </th><th style="color:var(--danger);">Conservative</th><th style="color:var(--gold);">Base</th><th style="color:var(--profit);">Aggressive</th></tr><tr><td>Rent</td><td style="color:var(--danger);">$2,800</td><td style="color:var(--gold);">$3,300</td><td style="color:var(--profit);">$3,800</td></tr><tr><td>Cost/SF</td><td style="color:var(--danger);">$270</td><td style="color:var(--gold);">$255</td><td style="color:var(--profit);">$235</td></tr><tr style="border-top:2px solid var(--gold);"><td><strong>ROI</strong></td><td style="color:var(--danger);"><strong>14.2%</strong></td><td style="color:var(--gold);"><strong>24.7%</strong></td><td style="color:var(--profit);"><strong>35.1%</strong></td></tr></table></div>
-            <div class="card" style="grid-column:1/-1;"><div class="card-header"><i class="fas fa-balance-scale"></i> COMPARISON</div>${S.compDeals.length===0?'<p style="font-size:0.55rem;color:var(--text-muted);">Add deals with +Compare</p>':S.compDeals.map(d=>`<div class="pipeline-item"><span>${d.n}</span><span style="color:var(--gold);">${d.sc}</span><span style="color:var(--profit);">${d.r}%</span><button class="btn btn-sm" style="border-color:var(--steel);color:var(--text-muted);" onclick="removeComp(${d.id})">✕</button></div>`).join('')}</div>
-          </div>`,
-        research: () => `
-          <div class="grid-2">
-            <div class="card"><div class="card-header"><i class="fas fa-gavel"></i> REGULATORY</div><div style="font-size:0.55rem;line-height:1.8;"><p>✅ Zoning: C-MU (verified)</p><p>⚠️ Fees: $18,500/unit</p><p>⚠️ Inclusionary: 10%</p><p>📋 Timeline: 8-11mo</p></div></div>
-            <div class="card"><div class="card-header"><i class="fas fa-map-marked-alt"></i> COMPETITIVE</div><div class="study-box">2,450 units in 3mi · 32% absorption</div><div class="pipeline-item"><span>🔴 The Travis (220u)</span><span>0.8mi</span></div><div class="pipeline-item"><span>🟠 Riverfront (340u)</span><span>1.2mi</span></div></div>
-          </div>`,
-        network: () => `
-          <div class="grid-2">
-            <div class="card"><div class="card-header"><i class="fas fa-users"></i> CONTACTS</div>${S.contacts.map(c=>`<div class="pipeline-item"><span>${c.av} ${c.n}</span><span style="font-size:0.48rem;">${c.rl}</span><div style="display:flex;gap:0.2rem;"><a href="tel:${c.ph.replace(/-/g,'')}" class="btn btn-sm" style="background:rgba(46,204,113,0.1);border-color:var(--profit);color:var(--profit);text-decoration:none;">📞</a><a href="sms:${c.ph.replace(/-/g,'')}" class="btn btn-sm" style="background:rgba(93,173,226,0.1);border-color:var(--info);color:var(--info);text-decoration:none;">💬</a><a href="mailto:${c.em}" class="btn btn-gold btn-sm" style="text-decoration:none;">✉️</a></div></div>`).join('')}</div>
-            <div class="card"><div class="card-header"><i class="fas fa-phone-alt"></i> RECENT</div>${S.callHistory.length===0&&S.smsHistory.length===0?'<p style="font-size:0.55rem;color:var(--text-muted);text-align:center;">No activity</p>':''}</div>
-          </div>`,
+        concepts: () => { const filtered = filtC(); return `<div class="card"><div class="card-header">CONCEPT GALLERY</div><div class="filter-bar"><span style="color:var(--text-muted);font-size:0.5rem;">STYLE:</span>${['all','modern','industrial','warm','specialty'].map(s=>`<button class="filter-btn ${S.conceptFilter.style===s?'on':''}" onclick="setCF('style','${s}')">${s[0].toUpperCase()+s.slice(1)}</button>`).join('')}<span style="color:var(--text-muted);font-size:0.5rem;margin-left:0.5rem;">INDUSTRY:</span>${['all','multifamily','mixed-use','office','hospitality'].map(s=>`<button class="filter-btn ${S.conceptFilter.industry===s?'on':''}" onclick="setCF('industry','${s}')">${s[0].toUpperCase()+s.slice(1)}</button>`).join('')}<span style="color:var(--text-muted);font-size:0.5rem;margin-left:0.5rem;">SCALE:</span>${['all','small','medium','large'].map(s=>`<button class="filter-btn ${S.conceptFilter.scale===s?'on':''}" onclick="setCF('scale','${s}')">${s[0].toUpperCase()+s.slice(1)}</button>`).join('')}</div>${filtered.length===0?`<div class="empty-state"><i class="fas fa-search"></i><p>No concepts match.</p><button class="btn btn-gold" onclick="setCF('style','all');setCF('industry','all');setCF('scale','all');">RESET</button></div>`:`<div class="concept-grid">${filtered.map(c=>`<div class="concept-card" onclick="previewConcept(${c.id})"><div class="concept-img"><i class="fas fa-${c.ic}"></i>${c.ba?`<span class="concept-badge ${c.ba==='best-roi'?'badge-roi':c.ba==='best-fit'?'badge-fit':'badge-premium'}">${c.bt}</span>`:''}</div><div class="concept-info"><h4>${c.n}</h4><span class="tag">${c.ur}u</span> <span class="tag gold">${c.re}</span></div></div>`).join('')}</div>`}</div>`; },
+        finance: () => `<div class="card"><div class="card-header">CAPITAL STACK</div><p style="color:var(--text-muted);font-size:0.6rem;">Capital stack modeling available in full version.</p></div>`,
+        research: () => `<div class="card"><div class="card-header">RESEARCH</div><p style="color:var(--text-muted);font-size:0.6rem;">Market research and regulatory intelligence available in full version.</p></div>`,
+        network: () => `<div class="card"><div class="card-header">NETWORK</div><p style="color:var(--text-muted);font-size:0.6rem;">Project network and contacts available in full version.</p></div>`,
       };
 
       window.updateAnalyzerUI = updateAnalyzerUI; window.setTier = setTier; window.setCF = setCF;
-      window.addComp = addComp; window.removeComp = removeComp;
-      window.previewConcept = previewConcept; window.purchaseConcept = purchaseConcept;
-      window.openChat = openChat; window.openGlobalChat = openGlobalChat;
-      window.render = render;
+      window.previewConcept = previewConcept; window.render = render;
 
       document.getElementById('mainNav').addEventListener('click', e => { const b = e.target.closest('.nav-btn'); if (!b) return; document.querySelectorAll('.nav-btn').forEach(x => x.classList.remove('active')); b.classList.add('active'); render(b.dataset.view); });
-      document.addEventListener('scroll', () => { document.querySelectorAll('.card').forEach(c => { const r = c.getBoundingClientRect(); if (r.top < window.innerHeight - 60) c.classList.add('visible'); }); }, { passive: true });
 
-      for (let i = 0; i < 6; i++) { const p = document.createElement('div'); p.className = 'particle'; p.style.left = Math.random() * 100 + '%'; p.style.width = (Math.random() * 3 + 1) + 'px'; p.style.height = p.style.width; p.style.animationDelay = Math.random() * 9 + 's'; p.style.animationDuration = (Math.random() * 6 + 6) + 's'; document.getElementById('particles').appendChild(p); }
+      S.analysis = analyze(); render('dashboard');
 
-      load(); S.analysis = analyze(); updateBadge(); render(S.curView || 'dashboard');
-  function initAutocomplete() {
-    const input = document.getElementById('sa');
-    if (!input) return;
-
-    const autocomplete = new google.maps.places.Autocomplete(input, {
-      types: ['address'],
-      componentRestrictions: { country: 'us' }
-    });
-
-    autocomplete.addListener('place_changed', () => {
-      const place = autocomplete.getPlace();
-      if (place.geometry) {
-        updateAnalyzerUI();
+      if (typeof google !== 'undefined' && google.maps && google.maps.places) {
+        const input = document.getElementById('sa');
+        if (input) {
+          const autocomplete = new google.maps.places.Autocomplete(input, { types: ['address'], componentRestrictions: { country: 'us' } });
+          autocomplete.addListener('place_changed', () => { const place = autocomplete.getPlace(); if (place.formatted_address) { input.value = place.formatted_address; updateAnalyzerUI(); } });
+        }
+      } else {
+        window.addEventListener('load', () => {
+          if (typeof google !== 'undefined' && google.maps && google.maps.places) {
+            const input = document.getElementById('sa');
+            if (input) {
+              const autocomplete = new google.maps.places.Autocomplete(input, { types: ['address'], componentRestrictions: { country: 'us' } });
+              autocomplete.addListener('place_changed', () => { const place = autocomplete.getPlace(); if (place.formatted_address) { input.value = place.formatted_address; updateAnalyzerUI(); } });
+            }
+          }
+        });
       }
-    });
-  }
-
-  window.addEventListener('load', initAutocomplete);
     })();
   </script>
 </body>
