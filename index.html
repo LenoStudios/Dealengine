@@ -165,6 +165,7 @@
     .toast { position: fixed; bottom: 1.5rem; right: 1.5rem; background: rgba(26,33,39,0.9); backdrop-filter: blur(15px); border: 1px solid var(--gold); color: var(--text-primary); padding: 0.65rem 1.1rem; border-radius: var(--radius-md); z-index: 200; font-size: 0.6rem; box-shadow: var(--gold-glow); animation: slideUp 0.3s ease; }
     @keyframes slideUp { from { transform: translateY(18px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
   </style>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD6dkKzPl5OE__uH0VfCyJrSdah-h2EXGs&libraries=places"></script>
 </head>
 <body>
   <div class="grid-bg"></div>
@@ -350,7 +351,7 @@
           <div class="grid-2">
             <div class="card"><div class="card-header"><i class="fas fa-file-signature"></i> PARAMETERS <span class="chip">AI</span></div>
               <div class="form-grid">
-                <div class="field span-3"><label>ADDRESS</label><input id="sa" value="${S.analysis?.inp?.a||'800 Congress Ave, Austin TX'}" onchange="updateAnalyzerUI()"></div>
+                <div class="field span-3"><label>ADDRESS</label><input id="sa" placeholder="Enter address..." onchange="updateAnalyzerUI()"></div>
                 <div class="field"><label>ZONING</label><select id="sz" onchange="updateAnalyzerUI()"><option value="R-MF" ${(S.analysis?.inp?.z||'C-MU')==='R-MF'?'selected':''}>Res MF</option><option value="C-MU" ${(S.analysis?.inp?.z||'C-MU')==='C-MU'?'selected':''}>Mixed-Use</option><option value="D-TOD" ${(S.analysis?.inp?.z||'')==='D-TOD'?'selected':''}>TOD</option><option value="I-L">Industrial</option></select></div>
                 <div class="field"><label>FAR</label><input id="sf" type="number" value="${S.analysis?.inp?.fl||4.0}" step="0.1" onchange="updateAnalyzerUI()"></div>
                 <div class="field"><label>HEIGHT</label><input id="sh" type="number" value="${S.analysis?.inp?.mh||90}" onchange="updateAnalyzerUI()"></div>
@@ -407,6 +408,24 @@
       for (let i = 0; i < 6; i++) { const p = document.createElement('div'); p.className = 'particle'; p.style.left = Math.random() * 100 + '%'; p.style.width = (Math.random() * 3 + 1) + 'px'; p.style.height = p.style.width; p.style.animationDelay = Math.random() * 9 + 's'; p.style.animationDuration = (Math.random() * 6 + 6) + 's'; document.getElementById('particles').appendChild(p); }
 
       load(); S.analysis = analyze(); updateBadge(); render(S.curView || 'dashboard');
+  function initAutocomplete() {
+    const input = document.getElementById('sa');
+    if (!input) return;
+
+    const autocomplete = new google.maps.places.Autocomplete(input, {
+      types: ['address'],
+      componentRestrictions: { country: 'us' }
+    });
+
+    autocomplete.addListener('place_changed', () => {
+      const place = autocomplete.getPlace();
+      if (place.geometry) {
+        updateAnalyzerUI();
+      }
+    });
+  }
+
+  window.addEventListener('load', initAutocomplete);
     })();
   </script>
 </body>
