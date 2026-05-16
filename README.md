@@ -37,7 +37,7 @@ Before a single brick is laid, developers spend **3–6 months and $50,000+** on
 - **Risk Assessment** — Entitlement risk, NIMBY risk, market timing analysis
 
 ### Advanced Features
-- **🎨 Concept Gallery** — 24 architectural styles with instant preview. Purchase complete design packages with 12 renders, presentation deck, and 3D model ($1,999)
+- **🎨 Concept Gallery** — 24 architectural styles with instant preview. Purchase complete design packages with 12 renders, and a presentation deck, ($1,999)
 - **📋 Deal Pipeline** — Track multiple deals, compare side-by-side
 - **💰 Capital Stack Builder** — Model senior debt, mezzanine, preferred equity, sponsor equity
 - **📈 Scenario Modeling** — Conservative, base, and aggressive projections
